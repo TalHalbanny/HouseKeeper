@@ -55,7 +55,7 @@ app.post('/api/validate_entry', async (req,res) => {
 
     const {data: registereHouse, error: supabaseError} = await supabase
     .from('households')
-    .select('email_adress, pin_code')
+    .select('id,email_adress, pin_code, household_name')
     .eq('email_adress', email)
     .eq('pin_code', pinCode)
     .maybeSingle();
@@ -74,7 +74,9 @@ app.post('/api/validate_entry', async (req,res) => {
 
     return res.status(200).json({
         validated: true,
-        message: "All Data Legal, Login Sucess"
+        message: "All Data Legal, Login Success",
+        householdName: registereHouse.household_name,
+        household_id: registereHouse.id
     })
 
 

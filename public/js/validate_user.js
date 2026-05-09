@@ -22,6 +22,7 @@ validationForm.addEventListener('submit', async (f)=> {
         //CHECK SERVER RESPONSE
 
         if(serverResult.validated) {
+            localStorage.setItem('householdName',serverResult.householdName)
             window.location.href = '/Dashboard';
         }
         else {
