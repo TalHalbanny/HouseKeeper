@@ -132,12 +132,36 @@ app.post('/api/register', async (req,res) => {
 
 })
 
+//ADD TASK API
+
+app.post('/api/add_task', async (req, res) => {
+
+    const {description, headline, urgency, house_id} = req.body;
+
+    const {data , error} = await supabase
+    .from('tasks')
+    .insert([{
+        household_id: house_id,
+        task_headline: headline,
+        task_body: description,
+        task_argentcy: urgency
+    }]);
+
+    if (error) return res.status(400).json({success: false, error: error.message});
+    res.json({success: true});
+
+});
+
 app.use(express.static(path.join(__dirname,'public'))); //STATIC PATH DEFINISION.
 
 //STATIC PAGES ROUTES:
 
 app.get('/Dashboard', (req,res) => {
     res.sendFile(path.join(__dirname,'views/dashboard.html'))
+})
+
+app.get('/add_task', (req,res) => {
+    res.sendFile(path.join(__dirname, 'views/add_task.html'))
 })
 
 app.get('/register', (req,res) => {
