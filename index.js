@@ -132,7 +132,7 @@ app.post('/api/register', async (req,res) => {
 
 })
 
-//ADD TASK API
+//3. ADD TASK API
 
 app.post('/api/add_task', async (req, res) => {
 
@@ -150,6 +150,24 @@ app.post('/api/add_task', async (req, res) => {
     if (error) return res.status(400).json({success: false, error: error.message});
     res.json({success: true});
 
+});
+
+//4. RETRIEVE TASKS BY HOUSEHOLD id
+
+app.get('/api/get_tasks/:house_id', async (req , res)=>{
+    const {house_id} = req.params;
+
+    const {data , error} = await supabase
+    .from('tasks')
+    .select('*')
+    .eq('household_id', house_id)
+    .order('created_at', {ascending: false});
+
+    if (error) {
+        return res.status(400).json({success: false, error: error.message});
+    }
+
+    return res.json({success: true, tasks: data});
 });
 
 app.use(express.static(path.join(__dirname,'public'))); //STATIC PATH DEFINISION.
