@@ -155,6 +155,7 @@ app.post('/api/add_task', async (req, res) => {
 //4. RETRIEVE TASKS BY HOUSEHOLD id
 
 app.get('/api/get_tasks/:house_id', async (req , res)=>{
+
     const {house_id} = req.params;
 
     const {data , error} = await supabase
@@ -168,6 +169,26 @@ app.get('/api/get_tasks/:house_id', async (req , res)=>{
     }
 
     return res.json({success: true, tasks: data});
+});
+
+//5. TASK DELETE 
+
+app.delete('/api/delete_task/:taskId', async (req,res) => {
+    
+    const {taskId} = req.params;
+
+    const {data, error} = await supabase
+    .from('tasks')
+    .delete()
+    .eq('id', taskId)
+
+    if (error) {
+        console.log("Attempting to delete task with ID:", taskId);
+        return res.status(400).json({success: false, error: error.message});
+    }
+
+    return res.json({success: true})
+
 });
 
 app.use(express.static(path.join(__dirname,'public'))); //STATIC PATH DEFINISION.

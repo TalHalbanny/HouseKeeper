@@ -29,7 +29,16 @@ const addTask = async (e) => {
     const result = await response.json();
 
     if (result.success) {
-        alert('Task Added Succesfully!')
+        Toastify({
+        text: "Task Added Successfully!",
+        duration: 3000, 
+        gravity: "bottom",
+        position: "right", 
+        style: {
+            background: "linear-gradient(to right, #00b09b, #00ff66)",
+            borderRadius: "15px",
+        }
+        }).showToast();
         document.getElementById('task_form').reset();
     }
     else {

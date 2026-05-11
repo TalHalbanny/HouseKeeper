@@ -57,7 +57,33 @@
     </nav>
 
     <main class="pt-28 px-10 text-center">
-        <h1 class="text-xl">התוכן שלך יופיע כאן</h1>
+        <div id="tasks_container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    </div>
+
+    <div class="flex justify-center items-center gap-8 mt-16 mb-12">
+    <button id="prev_btn" onclick="prevPage()" 
+        class="group flex items-center justify-center w-12 h-12 rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 text-slate-400 hover:text-green-600 hover:border-green-200 hover:shadow-xl hover:shadow-green-900/5 transition-all duration-300 ease-out active:scale-95">
+        <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+    </button>
+    
+    <div class="flex flex-col items-center gap-1">
+
+        <span id="page_number" class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Navigation</span>
+       
+        <span class="text-sm font-bold text-slate-600 bg-slate-100 px-4 py-1 rounded-full" id="page_display_current"></span>
+    </div>
+    
+    <button id="next_btn" onclick="nextPage()" 
+        class="group flex items-center justify-center w-12 h-12 rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 text-slate-400 hover:text-green-600 hover:border-green-200 hover:shadow-xl hover:shadow-green-900/5 transition-all duration-300 ease-out active:scale-95">
+        <svg class="w-6 h-6 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+    </button>
+
+    </div>
+
     </main>
 
     <script>
