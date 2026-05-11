@@ -3,6 +3,8 @@ let allTasks = [];
 let currentPage = 1;
 const tasksPerPage = 3;
 
+//on dashboard page load, add username to navbar & get tasks data from nodejs API route.
+
 document.addEventListener('DOMContentLoaded', async () => {
     const house_name = localStorage.getItem('householdName');
     const houseId = localStorage.getItem('household_id');
@@ -35,7 +37,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+//display tasks and pagination logic. 
+
 function displayTasksByPage(page) {
+    
     currentPage = page;
     const startIndex = (page - 1) * tasksPerPage;
     const endIndex = startIndex + tasksPerPage;
@@ -44,6 +49,8 @@ function displayTasksByPage(page) {
     renderTasks(tasksToShow);
     updatePaginationButtons();
 }
+
+//render tasks as cards and insert into pagination.
 
 function renderTasks(tasks) {
 
@@ -83,6 +90,8 @@ function renderTasks(tasks) {
     });
 }
 
+//update pagination buttons considering the number of tasks present.
+
 function updatePaginationButtons() {
 
     const nextBtn = document.getElementById('next_btn');
@@ -113,17 +122,23 @@ function updatePaginationButtons() {
     }
 }
 
+//next page button logic.
+
 function nextPage() {
     if ((currentPage * tasksPerPage) < allTasks.length) {
         displayTasksByPage(currentPage + 1);
     }
 }
 
+//previous page button logic.
+
 function prevPage() {
     if (currentPage > 1) {
         displayTasksByPage(currentPage - 1);
     }
 }
+
+//complete task button logic, removing by DELETE TASK API on nodejs index.js server request.
 
 async function completeTask(event, taskId) {
 
