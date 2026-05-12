@@ -6,6 +6,7 @@ const tasksPerPage = 3;
 //on dashboard page load, add username to navbar & get tasks data from nodejs API route.
 
 document.addEventListener('DOMContentLoaded', async () => {
+    
     const house_name = localStorage.getItem('householdName');
     const houseId = localStorage.getItem('household_id');
     const displayNameElem = document.getElementById('display_name');
@@ -22,11 +23,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         const response = await fetch(`/api/get_tasks/${houseId}`);
+
         const result = await response.json();
 
         if (result.success && result.tasks.length > 0) {
             allTasks = result.tasks; 
-            console.log("Tasks loaded successfully:", allTasks.length); // בדיקה בקונסול
+            console.log("Tasks loaded successfully:", allTasks.length); 
             displayTasksByPage(1); 
         } else {
             tasksContainer.innerHTML = '<p class="text-slate-400 text-center col-span-full py-10 font-medium">No tasks found. Start by adding one!</p>';

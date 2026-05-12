@@ -152,6 +152,27 @@ app.post('/api/add_task', async (req, res) => {
 
 });
 
+app.post('/app/add_car', async (req,res) => {
+
+    const {house_id, car_maker, test, car_model, car_year, isActive} = req.body;
+
+    const {data, error} = await supabase
+    .from('cars')
+    .insert([{
+        household_id: house_id,
+        model: car_model,
+        make: car_maker,
+        annual_test: test,
+        active: isActive,
+        year: car_year
+    }])
+
+    if(error) return res.status(400).json({sucess: false, error: error.message});
+
+    res.json({sucess: true});
+
+});
+
 //4. RETRIEVE TASKS BY HOUSEHOLD id
 
 app.get('/api/get_tasks/:house_id', async (req , res)=>{
@@ -211,6 +232,9 @@ app.get('/', (req,res) => {
     res.sendFile(path.join(__dirname, 'views/index.html'))
 });
 
+app.get('/add_to_house', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views/add_to_home.html'))
+})
 
 app.listen(port, () => {
     console.log(`Server Running on ${port}`)
