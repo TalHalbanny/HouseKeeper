@@ -152,27 +152,6 @@ app.post('/api/add_task', async (req, res) => {
 
 });
 
-app.post('/app/add_car', async (req,res) => {
-
-    const {house_id, car_maker, test, car_model, car_year, isActive} = req.body;
-
-    const {data, error} = await supabase
-    .from('cars')
-    .insert([{
-        household_id: house_id,
-        model: car_model,
-        make: car_maker,
-        annual_test: test,
-        active: isActive,
-        year: car_year
-    }])
-
-    if(error) return res.status(400).json({sucess: false, error: error.message});
-
-    res.json({sucess: true});
-
-});
-
 //4. RETRIEVE TASKS BY HOUSEHOLD id
 
 app.get('/api/get_tasks/:house_id', async (req , res)=>{
@@ -211,6 +190,50 @@ app.delete('/api/delete_task/:taskId', async (req,res) => {
     return res.json({success: true})
 
 });
+
+//6. ADD A CAR TO HOUSEHOLD
+
+app.post('/api/add_car', async (req,res) => {
+
+    const {house_id, car_maker, test, car_model, car_year, isActive} = req.body;
+
+    const {data, error} = await supabase
+
+    .from('cars')
+    .insert([{
+        household_id: house_id,
+        model: car_model,
+        make: car_maker,
+        annual_test: test,
+        active: isActive,
+        year: car_year
+    }])
+
+    if(error) return res.status(400).json({sucess: false, error: error.message});
+
+    res.json({sucess: true});
+
+});
+
+//7. GET CAR DATA
+
+app.get('/api/get_cars/:house_id' , async (req, res) => {
+
+    const {house_id} = req.params;
+
+    const {data , error } = await supabase 
+    .from ('cars')
+    .select('*')
+    .eq('household_id', house_id)
+    
+    if (error) {
+        return res.status(400).json({success: false, error: error.message});
+    }
+
+    return res.json({success: true, cars: data });
+
+})
+
 
 app.use(express.static(path.join(__dirname,'public'))); //STATIC PATH DEFINISION.
 

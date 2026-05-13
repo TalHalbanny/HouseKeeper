@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         console.error("Failed to fetch tasks:", error);
     }
+
+    loadCars();
 });
 
 //display tasks and pagination logic. 
@@ -57,7 +59,15 @@ function displayTasksByPage(page) {
 function renderTasks(tasks) {
 
     const tasksContainer = document.getElementById('tasks_container');
+
+     if (!tasksContainer) {
+        console.warn("Tasks container not found on this page, skipping render.");
+        return; 
+    }
+    
     tasksContainer.innerHTML = ''; 
+
+   
 
     tasks.forEach(task => {
         const priorityColor = {
@@ -153,7 +163,6 @@ async function completeTask(event, taskId) {
     taskCard.style.transform = 'scale(0.95)';
     }
     
- 
 
     try {
 
@@ -185,4 +194,107 @@ async function completeTask(event, taskId) {
     } catch (error) {
         console.error("Error deleting task:", error);
     }
+}
+
+async function loadCars() {
+
+    const houseId = localStorage.getItem('household_id');
+    const carContainer = document.getElementById('cars_container');
+
+    if (!carContainer) {return;}
+
+    if (!houseId) {
+        console.error("No Household ID found in localStorage!");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/get_cars/${houseId}`);
+        const result = await response.json();
+
+        if (result.success && result.cars.length > 0) {
+            renderCars(result.cars);
+        }
+
+        else {
+            carContainer.innerHTML = '<p class="text-slate-400 text-center col-span-full py-10 font-medium">No cars registered yet.</p>';
+    
+        }
+
+    } catch (error) {
+
+        console.log("Server Side Error:" + " " + error)
+
+    }
+}
+
+function renderCars(cars) {
+
+    const carsContainer = document.getElementById('cars_container');
+    if (!carsContainer) return;
+    
+    carsContainer.innerHTML = ''; 
+
+    cars.forEach(car => {
+        const statusBadge = car.active 
+            ? '<span class="bg-green-100 text-green-700 border-green-200 px-2 py-0.5 rounded-full text-[10px] font-bold">ACTIVE</span>' 
+            : '<span class="bg-gray-100 text-gray-500 border-gray-200 px-2 py-0.5 rounded-full text-[10px] font-bold">INACTIVE</span>';
+
+        const carCard = `
+            <div class="bg-white p-6 rounded-[2rem] shadow-xl shadow-blue-900/5 border border-gray-100 transition-all hover:scale-[1.02] relative overflow-hidden group">
+                
+                <div class="absolute -right-4 -bottom-2 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity duration-500">
+                    <svg width="160" height="80" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                    </svg>
+                </div>
+
+                <div class="flex justify-between items-start mb-4 relative z-10">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">${car.make}</h3>
+                        <p class="text-slate-500 text-sm font-medium">${car.model} (${car.year})</p>
+                    </div>
+                    ${statusBadge}
+                </div>
+                
+                <div class="space-y-3 relative z-10">
+                    <div class="flex items-center text-sm text-slate-600">
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center mr-3 text-blue-500">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <span class="font-medium mr-2">Annual Test:</span>
+                        <span class="ml-auto font-bold ${isTestClose(car.annual_test) ? 'text-red-500' : 'text-slate-700'}">
+                            ${new Date(car.annual_test).toLocaleDateString('he-IL')}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-2 relative z-10">
+                    <button onclick="deleteCar(event, '${car.id}')" 
+                        class="flex-1 py-2 text-xs font-bold text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors border border-transparent hover:border-red-100">
+                        Remove Car
+                    </button>
+                </div>
+            </div>`;
+            
+        carsContainer.innerHTML += carCard;
+    });
+}
+
+/**
+ * @param {string} 
+ * @returns {boolean} 
+ */
+function isTestClose(dateString) {
+    if (!dateString) return false;
+
+    const testDate = new Date(dateString);
+    const today = new Date();
+    
+    const diffTime = testDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays <= 30;
 }

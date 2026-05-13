@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>HouseKeeper | Dashboard</title>
-
 </head>
 <body class="bg-gray-50">
 
@@ -29,7 +28,7 @@
                 <div class="flex items-center gap-2 md:gap-4">
                     <button class="p-2 text-slate-400 hover:text-blue-600 transition-colors relative">
                         <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-                        <svg  class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                         </svg>
                     </button>
@@ -39,7 +38,7 @@
                     <div id="display_name" class="text-[11px] font-bold text-slate-800 hidden sm:block"></div>
 
                     <button id="mobile-menu-button" class="md:hidden p-2 text-slate-600">
-                        <svg  class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                         </svg>
                     </button>
@@ -58,33 +57,44 @@
     </nav>
 
     <main class="pt-28 px-10 text-center">
+
+        <!-- כותרת עדינה יותר בצבע ירוק -->
+        <h2 class="text-2xl font-semibold text-green-600 mb-8 text-left">My Tasks</h2>
+
         <div id="tasks_container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    </div>
+            <!-- המכולות ירונדרו כאן מה-JS -->
+        </div>
 
-    <div class="flex justify-center items-center gap-8 mt-16 mb-12">
-    <button id="prev_btn" onclick="prevPage()" 
-        class="group flex items-center justify-center w-12 h-12 rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 text-slate-400 hover:text-green-600 hover:border-green-200 hover:shadow-xl hover:shadow-green-900/5 transition-all duration-300 ease-out active:scale-95">
-        <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-    </button>
-    
-    <div class="flex flex-col items-center gap-1">
+        <div class="flex justify-center items-center gap-8 mt-16 mb-12">
+            <button id="prev_btn" onclick="prevPage()" 
+                class="group flex items-center justify-center w-12 h-12 rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 text-slate-400 hover:text-green-600 hover:border-green-200 hover:shadow-xl hover:shadow-green-900/5 transition-all duration-300 ease-out active:scale-95">
+                <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            
+            <div class="flex flex-col items-center gap-1">
+                <span id="page_number" class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Navigation</span>
+                <span class="text-sm font-bold text-slate-600 bg-slate-100 px-4 py-1 rounded-full" id="page_display_current"></span>
+            </div>
+            
+            <button id="next_btn" onclick="nextPage()" 
+                class="group flex items-center justify-center w-12 h-12 rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 text-slate-400 hover:text-green-600 hover:border-green-200 hover:shadow-xl hover:shadow-green-900/5 transition-all duration-300 ease-out active:scale-95">
+                <svg class="w-6 h-6 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+        </div>
 
-        <span id="page_number" class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Navigation</span>
-       
-        <span class="text-sm font-bold text-slate-600 bg-slate-100 px-4 py-1 rounded-full" id="page_display_current"></span>
-    </div>
-    
-    <button id="next_btn" onclick="nextPage()" 
-        class="group flex items-center justify-center w-12 h-12 rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 text-slate-400 hover:text-green-600 hover:border-green-200 hover:shadow-xl hover:shadow-green-900/5 transition-all duration-300 ease-out active:scale-95">
-        <svg class="w-6 h-6 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-    </button>
+        <!-- קו מפריד בצבע ירוק עדין -->
+        <hr class="border-green-100 mb-12"> 
 
-    </div>
+        <!-- כותרת עדינה יותר בצבע ירוק -->
+        <h2 class="text-2xl font-semibold text-green-600 mb-8 text-left">My Garage</h2>
 
+        <div id="cars_container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+            <!-- המכולות ירונדרו כאן מה-JS -->
+        </div>
     </main>
 
     <script>
