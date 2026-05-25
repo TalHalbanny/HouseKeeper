@@ -1,5 +1,4 @@
 const add_car = async (e) => {
-
     e.preventDefault();
 
     const house_id = localStorage.getItem('household_id');
@@ -12,12 +11,11 @@ const add_car = async (e) => {
     const is_active_boolean = inserted_active ? inserted_active.value === 'true' : false;
 
     try {
-        const respone = await fetch('/api/add_car', {
+        const response = await fetch('/api/add_car', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }, 
-
+            },
             body: JSON.stringify({
                 house_id: house_id,
                 car_maker: inserted_maker,
@@ -26,39 +24,31 @@ const add_car = async (e) => {
                 test: inserted_date,
                 isActive: is_active_boolean 
             })
-
         });
 
-        const result = await respone.json();
+        const result = await response.json();
 
-        if (result.sucess) {
+        if (result.success) {
             Toastify({
-        text: "Car Added Successfully!",
-        duration: 3000, 
-        gravity: "bottom",
-        position: "right", 
-        style: {
-            background: "linear-gradient(to right, #00b09b, #00ff66)",
-            borderRadius: "15px",
+                text: "Car Added Successfully!",
+                duration: 3000, 
+                gravity: "bottom",
+                position: "right", 
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #00ff66)",
+                    borderRadius: "15px",
+                }
+            }).showToast();
+
+            document.getElementById('carRegistrationForm').reset();
+        } else {
+            // Added result.error display to see specific backend validation issues
+            alert('Failed to Insert Data! ' + (result.error || 'Unknown error'));
         }
-
-        }).showToast();
-
-        document.getElementById('carRegistrationForm').reset();
-        }
-
-        else {
-            alert('Failed to Insert Data!' + result.error)
-        }
-
-        
     } catch (error) {
-
-        console.log("Error Occured On Server Side:" + " " + error)
-        alert("Failure in Inserting Data!")
-
+        console.error("Error Occurred On Server Side:", error);
+        alert("Failure in Inserting Data!");
     }
-
 };
 
 document.addEventListener('DOMContentLoaded', () => {
