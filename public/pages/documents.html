@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="he" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/app.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <title>HouseKeeper | Documents</title>
+</head>
+<body class="app-page">
+
+    <nav class="app-nav flex justify-center px-4 pt-3 pb-1 fade-in-up">
+        <div class="w-full max-w-7xl glass-nav shadow-lg shadow-green-900/5 border border-white/60 px-6 py-2">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="/Dashboard"><img src="/assets/logo.png" alt="HouseKeeper Logo" class="h-10 w-auto object-contain drop-shadow-md"></a>
+                </div>
+                <div class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-semibold text-slate-500">
+                    <a href="/Dashboard" data-nav="dashboard" class="nav-link">Dashboard</a>
+                    <a href="/documents" data-nav="documents" class="nav-link">Documents</a>
+                    <a href="/add_task" data-nav="add_task" class="nav-link">Add Task</a>
+                    <a href="/add_to_house" data-nav="add_to_house" class="nav-link">Add to House</a>
+                    <a href="/event_calendar" data-nav="event_calendar" class="nav-link">Event Calendar</a>
+                    <a href="/shopping_list" data-nav="shopping_list" class="nav-link">Shopping Lists</a>
+                </div>
+                <div class="flex items-center gap-2 md:gap-3">
+                    <button id="profile-btn" class="flex items-center gap-2 group rounded-2xl pl-1 pr-3 py-1 hover:bg-green-50 transition-all duration-300">
+                        <div id="profile-avatar" class="profile-avatar w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-black shadow-md shadow-green-500/20">H</div>
+                        <div class="hidden md:block text-left">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-0.5">Household</p>
+                            <p id="display_name" class="text-xs font-bold text-slate-800 max-w-[120px] truncate leading-tight"></p>
+                        </div>
+                    </button>
+                    <button type="button" class="hk-logout-btn" aria-label="Log out">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                        <span class="hidden md:inline">Log Out</span>
+                    </button>
+                    <button id="mobile-menu-button" type="button" class="md:hidden p-2 text-slate-600 shrink-0" aria-label="Menu" aria-expanded="false">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="app-nav-mobile-menu hidden md:hidden">
+                <a href="/Dashboard" data-nav="dashboard" class="nav-link">Dashboard</a>
+                <a href="/documents" data-nav="documents" class="nav-link">Documents</a>
+                <a href="/add_task" data-nav="add_task" class="nav-link">Add Task</a>
+                <a href="/add_to_house" data-nav="add_to_house" class="nav-link">Add to House</a>
+                <a href="/event_calendar" data-nav="event_calendar" class="nav-link">Event Calendar</a>
+                <a href="/shopping_list" data-nav="shopping_list" class="nav-link">Shopping Lists</a>
+                <button type="button" class="hk-logout-btn hk-logout-btn-mobile md:hidden">Log Out</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="profile-modal" class="hk-modal-overlay fixed inset-0 z-[9998] hidden items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+        <div id="profile-modal-box" class="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl border border-gray-100 transform scale-95 opacity-0 transition-all duration-300">
+            <div class="flex items-center gap-4 mb-6">
+                <div id="profile-modal-avatar" class="profile-avatar w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-black">H</div>
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800">Household Profile</h3>
+                    <p class="text-sm text-slate-400">Customize your family name</p>
+                </div>
+            </div>
+            <label for="household-name-input" class="form-label">Household Name</label>
+            <input id="household-name-input" type="text" maxlength="60" class="form-input mb-2"/>
+            <p id="profile-error" class="text-red-500 text-xs font-medium mb-4 hidden"></p>
+            <p id="profile-success" class="text-green-600 text-xs font-medium mb-4 hidden">Name updated successfully!</p>
+            <div class="flex gap-3 mt-6">
+                <button id="profile-cancel-btn" class="flex-1 py-3 text-sm font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 rounded-xl border border-gray-100">Cancel</button>
+                <button id="profile-save-btn" class="flex-1 py-3 text-sm font-bold text-white bg-gradient-to-r from-green-400 to-[#2FA084] rounded-xl shadow-lg">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="app-main pb-16 px-4 flex justify-center fade-in-up fade-in-up-delay-1">
+        <div class="w-full max-w-lg">
+            <div class="text-center mb-8">
+                <p class="text-[10px] font-black text-green-500 uppercase tracking-[0.25em] mb-2">Archive</p>
+                <h1 class="text-3xl font-bold text-slate-800">Upload Document</h1>
+                <p class="text-slate-400 text-sm mt-2 font-medium">Save important files with a cover photo &amp; title</p>
+            </div>
+
+            <div class="form-card rounded-[2rem] p-8 md:p-10">
+                <form id="document_form" class="space-y-6" enctype="multipart/form-data" novalidate>
+                    <div>
+                        <label for="doc_title" class="form-label">Document Title</label>
+                        <input type="text" id="doc_title" name="title" maxlength="80"
+                            placeholder="e.g. Home Insurance Policy"
+                            class="form-input">
+                    </div>
+
+                    <div>
+                        <p class="form-label">Cover Picture <span class="text-slate-400 font-normal normal-case">(optional)</span></p>
+                        <div id="cover_dropzone" class="cover-dropzone flex flex-col items-center justify-center rounded-2xl p-6 bg-green-50/50 min-h-[10rem]">
+                            <input type="file" id="cover_image" name="cover_image" accept="image/*" class="hidden">
+                            <div id="cover_placeholder" class="text-center">
+                                <img src="/assets/document-default.svg" alt="Default document icon" class="w-20 h-20 mx-auto mb-3 rounded-2xl shadow-sm">
+                                <p class="text-sm font-semibold text-slate-600">Default icon will be used</p>
+                                <p class="text-xs text-slate-400 mt-1">Or add your own cover below</p>
+                            </div>
+                            <img id="cover_preview" class="cover-preview hidden w-full h-40 rounded-xl object-cover" alt="Cover preview">
+                            <div class="flex gap-2 mt-3">
+                                <button type="button" id="cover_pick_btn" class="text-xs font-bold text-green-600 bg-white border border-green-200 px-4 py-2 rounded-xl hover:bg-green-50 transition-colors">Add cover photo</button>
+                                <button type="button" id="cover_reset_btn" class="hidden text-xs font-bold text-slate-500 bg-white border border-gray-200 px-4 py-2 rounded-xl hover:bg-gray-50 transition-colors">Use default icon</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="form-label">Document File</p>
+                        <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50">
+                            <div class="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p id="file_label" class="text-sm font-semibold text-slate-600 truncate">No file chosen</p>
+                                <p class="text-xs text-slate-400">PDF, images, Word docs</p>
+                            </div>
+                            <button type="button" id="doc_pick_btn" class="text-xs font-bold text-white bg-gradient-to-r from-[#9333ea] to-[#792CA2] px-4 py-2 rounded-xl shadow-sm hover:shadow-md transition-all flex-shrink-0">Choose file</button>
+                            <input type="file" id="document_file" name="document_file" class="hidden"
+                                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.webp,.txt,application/pdf,image/*">
+                        </div>
+                    </div>
+
+                    <p id="upload_error" class="hidden text-red-600 text-sm font-semibold bg-red-50 border border-red-200 rounded-xl px-4 py-3"></p>
+
+                    <div class="pt-2">
+                        <button type="submit" id="upload_btn" class="btn-primary btn-purple">Upload Document</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="/Dashboard" class="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-green-600 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    Return to Dashboard
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/auth-guard.js"></script>
+    <script src="/js/nav.js"></script>
+    <script src="/js/toast.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/documents.js"></script>
+</body>
+</html>

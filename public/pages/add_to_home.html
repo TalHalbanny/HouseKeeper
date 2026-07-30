@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="he" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/app.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <title>HouseKeeper | Add To House</title>
+</head>
+<body class="app-page">
+
+    <nav class="app-nav flex justify-center px-4 pt-3 pb-1 fade-in-up">
+        <div class="w-full max-w-7xl glass-nav shadow-lg shadow-green-900/5 border border-white/60 px-6 py-2">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="/Dashboard"><img src="/assets/logo.png" alt="HouseKeeper Logo" class="h-10 w-auto object-contain drop-shadow-md"></a>
+                </div>
+                <div class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-semibold text-slate-500">
+                    <a href="/Dashboard" data-nav="dashboard" class="nav-link">Dashboard</a>
+                    <a href="/documents" data-nav="documents" class="nav-link">Documents</a>
+                    <a href="/add_task" data-nav="add_task" class="nav-link">Add Task</a>
+                    <a href="/add_to_house" data-nav="add_to_house" class="nav-link">Add to House</a>
+                    <a href="/event_calendar" data-nav="event_calendar" class="nav-link">Event Calendar</a>
+                    <a href="/shopping_list" data-nav="shopping_list" class="nav-link">Shopping Lists</a>
+                </div>
+                <div class="flex items-center gap-2 md:gap-3">
+                    <button id="profile-btn" class="flex items-center gap-2 group rounded-2xl pl-1 pr-3 py-1 hover:bg-green-50 transition-all duration-300">
+                        <div id="profile-avatar" class="profile-avatar w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-black shadow-md shadow-green-500/20">H</div>
+                        <div class="hidden md:block text-left">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-0.5">Household</p>
+                            <p id="display_name" class="text-xs font-bold text-slate-800 max-w-[120px] truncate leading-tight"></p>
+                        </div>
+                    </button>
+                    <button type="button" class="hk-logout-btn" aria-label="Log out">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                        <span class="hidden md:inline">Log Out</span>
+                    </button>
+                    <button id="mobile-menu-button" type="button" class="md:hidden p-2 text-slate-600 shrink-0" aria-label="Menu" aria-expanded="false">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="app-nav-mobile-menu hidden md:hidden">
+                <a href="/Dashboard" data-nav="dashboard" class="nav-link">Dashboard</a>
+                <a href="/documents" data-nav="documents" class="nav-link">Documents</a>
+                <a href="/add_task" data-nav="add_task" class="nav-link">Add Task</a>
+                <a href="/add_to_house" data-nav="add_to_house" class="nav-link">Add to House</a>
+                <a href="/event_calendar" data-nav="event_calendar" class="nav-link">Event Calendar</a>
+                <a href="/shopping_list" data-nav="shopping_list" class="nav-link">Shopping Lists</a>
+                <button type="button" class="hk-logout-btn hk-logout-btn-mobile md:hidden">Log Out</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="profile-modal" class="hk-modal-overlay fixed inset-0 z-[9998] hidden items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+        <div id="profile-modal-box" class="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl border border-gray-100 transform scale-95 opacity-0 transition-all duration-300">
+            <label for="household-name-input" class="form-label">Household Name</label>
+            <input id="household-name-input" type="text" maxlength="60" class="form-input mb-2"/>
+            <p id="profile-error" class="text-red-500 text-xs font-medium mb-4 hidden"></p>
+            <p id="profile-success" class="text-green-600 text-xs font-medium mb-4 hidden">Name updated successfully!</p>
+            <div class="flex gap-3 mt-6">
+                <button id="profile-cancel-btn" class="flex-1 py-3 text-sm font-bold text-slate-500 bg-slate-50 rounded-xl border border-gray-100">Cancel</button>
+                <button id="profile-save-btn" class="flex-1 py-3 text-sm font-bold text-white bg-gradient-to-r from-green-400 to-[#2FA084] rounded-xl">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="app-main pb-16 px-4 flex justify-center fade-in-up fade-in-up-delay-1">
+        <div class="w-full max-w-lg">
+            <div class="text-center mb-8">
+                <p class="text-[10px] font-black text-[#792CA2] uppercase tracking-[0.25em] mb-2">Household</p>
+                <h1 class="text-3xl font-bold text-slate-800">Add to House</h1>
+                <p class="text-slate-400 text-sm mt-2 font-medium">Register a vehicle, member, or pet</p>
+            </div>
+
+            <div class="flex gap-1.5 p-1.5 bg-white/80 rounded-2xl border border-gray-100 shadow-sm mb-6">
+                <button type="button" id="tab_vehicle" class="tab-btn active flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all">Vehicle</button>
+                <button type="button" id="tab_resident" class="tab-btn flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all">Resident</button>
+                <button type="button" id="tab_pet" class="tab-btn flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all">Pet</button>
+            </div>
+
+            <!-- Vehicle panel -->
+            <div id="panel_vehicle" class="tab-panel active">
+                <div class="form-card rounded-[2rem] p-8 md:p-10">
+                    <form id="carRegistrationForm" class="space-y-6" novalidate>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="maker_name" class="form-label">Car Maker</label>
+                                <input id="maker_name" type="text" placeholder="e.g. Tesla" class="form-input">
+                            </div>
+                            <div>
+                                <label for="model_name" class="form-label">Car Model</label>
+                                <input id="model_name" type="text" placeholder="e.g. Model 3" class="form-input">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="car_year" class="form-label">Car Year</label>
+                            <input id="car_year" type="number" min="1900" max="2030" placeholder="2024" class="form-input">
+                        </div>
+                        <div>
+                            <label for="test_date" class="form-label">Annual Car Test Date</label>
+                            <input id="test_date" type="date" class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">Vehicle Status</label>
+                            <div class="flex gap-3">
+                                <label class="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border border-gray-200 bg-gray-50 cursor-pointer has-[:checked]:border-green-500 has-[:checked]:bg-green-50">
+                                    <input type="radio" name="status" value="true" class="w-4 h-4 text-green-600" checked>
+                                    <span class="text-sm font-semibold">Active</span>
+                                </label>
+                                <label class="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border border-gray-200 bg-gray-50 cursor-pointer has-[:checked]:border-red-400 has-[:checked]:bg-red-50">
+                                    <input type="radio" name="status" value="false" class="w-4 h-4 text-red-500">
+                                    <span class="text-sm font-semibold">Not Active</span>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary btn-purple w-full">Register Vehicle</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Resident panel -->
+            <div id="panel_resident" class="tab-panel">
+                <div class="form-card rounded-[2rem] p-8 md:p-10">
+                    <form id="residentForm" class="space-y-6" novalidate>
+                        <div>
+                            <label for="resident_name" class="form-label">Full Name</label>
+                            <input id="resident_name" type="text" placeholder="e.g. Sarah Cohen" class="form-input">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="resident_age" class="form-label">Age</label>
+                                <input id="resident_age" type="number" min="0" max="120" placeholder="25" class="form-input">
+                            </div>
+                            <div>
+                                <label for="resident_id" class="form-label">ID Number</label>
+                                <input id="resident_id" type="password" placeholder="•••••••••" class="form-input" autocomplete="off">
+                                <p class="text-[10px] text-slate-400 mt-1">Hidden on dashboard until PIN unlock</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Resident Type</label>
+                            <div class="flex gap-3">
+                                <label class="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border border-gray-200 bg-gray-50 cursor-pointer has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
+                                    <input type="radio" name="resident_type" value="child" class="w-4 h-4 text-purple-600">
+                                    <span class="text-sm font-semibold">Child</span>
+                                </label>
+                                <label class="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border border-gray-200 bg-gray-50 cursor-pointer has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
+                                    <input type="radio" name="resident_type" value="adult" class="w-4 h-4 text-purple-600" checked>
+                                    <span class="text-sm font-semibold">Adult</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="child_fields" class="hidden space-y-4">
+                            <div>
+                                <label for="school_schedule" class="form-label">School Schedule</label>
+                                <input id="school_schedule" type="text" placeholder="e.g. Mon–Fri 8:00–15:00, Jerusalem Elementary" class="form-input">
+                                <p class="text-[10px] text-slate-400 mt-1">When and where they attend school</p>
+                            </div>
+                        </div>
+                        <div id="adult_fields" class="space-y-4">
+                            <div>
+                                <label for="workplace" class="form-label">Workplace</label>
+                                <input id="workplace" type="text" placeholder="e.g. Tech Corp, Tel Aviv" class="form-input">
+                            </div>
+                            <div>
+                                <label for="work_hours" class="form-label">Work Hours</label>
+                                <input id="work_hours" type="text" placeholder="e.g. Sun–Thu 9:00–18:00" class="form-input">
+                            </div>
+                        </div>
+                        <p id="resident_error" class="text-red-500 text-sm font-medium hidden"></p>
+                        <button type="submit" id="add_resident_btn" class="btn-primary btn-purple w-full">Add Resident</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Pet panel -->
+            <div id="panel_pet" class="tab-panel">
+                <div class="form-card rounded-[2rem] p-8 md:p-10">
+                    <form id="petForm" class="space-y-6" novalidate>
+                        <div>
+                            <label for="pet_name" class="form-label">Pet Name</label>
+                            <input id="pet_name" type="text" placeholder="e.g. Luna" class="form-input">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="pet_species" class="form-label">Species</label>
+                                <select id="pet_species" class="form-input">
+                                    <option value="">Select species</option>
+                                    <option value="Dog">Dog</option>
+                                    <option value="Cat">Cat</option>
+                                    <option value="Bird">Bird</option>
+                                    <option value="Fish">Fish</option>
+                                    <option value="Rabbit">Rabbit</option>
+                                    <option value="Hamster">Hamster</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="pet_breed" class="form-label">Breed</label>
+                                <input id="pet_breed" type="text" placeholder="e.g. Golden Retriever" class="form-input">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="pet_age" class="form-label">Age (years)</label>
+                            <input id="pet_age" type="number" min="0" max="50" placeholder="3" class="form-input">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="vet_name" class="form-label">Veterinarian</label>
+                                <input id="vet_name" type="text" placeholder="e.g. Dr. Levi" class="form-input">
+                            </div>
+                            <div>
+                                <label for="vet_phone" class="form-label">Vet Phone</label>
+                                <input id="vet_phone" type="tel" placeholder="e.g. 050-1234567" class="form-input">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="pet_notes" class="form-label">Notes</label>
+                            <textarea id="pet_notes" rows="3" placeholder="Allergies, medications, feeding schedule..." class="form-input resize-none"></textarea>
+                        </div>
+                        <p id="pet_error" class="text-red-500 text-sm font-medium hidden"></p>
+                        <button type="submit" id="add_pet_btn" class="btn-primary btn-purple w-full">Add Pet</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="/Dashboard" class="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-[#792CA2] transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    Return to Dashboard
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchTab(name) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab_' + name)?.classList.add('active');
+            document.getElementById('panel_' + name)?.classList.add('active');
+        }
+        document.getElementById('tab_vehicle')?.addEventListener('click', () => switchTab('vehicle'));
+        document.getElementById('tab_resident')?.addEventListener('click', () => switchTab('resident'));
+        document.getElementById('tab_pet')?.addEventListener('click', () => switchTab('pet'));
+        const tabParam = new URLSearchParams(window.location.search).get('tab');
+        if (tabParam === 'resident') switchTab('resident');
+        if (tabParam === 'pet') switchTab('pet');
+    </script>
+    <script src="/js/auth-guard.js"></script>
+    <script src="/js/nav.js"></script>
+    <script src="/js/toast.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/add_car.js"></script>
+    <script src="/js/add_resident.js"></script>
+    <script src="/js/add_pet.js"></script>
+</body>
+</html>

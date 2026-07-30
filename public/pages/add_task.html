@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="he" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/app.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <title>HouseKeeper | Add Task</title>
+</head>
+<body class="app-page">
+
+    <nav class="app-nav flex justify-center px-4 pt-3 pb-1 fade-in-up">
+        <div class="w-full max-w-7xl glass-nav shadow-lg shadow-green-900/5 border border-white/60 px-6 py-2">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="/Dashboard"><img src="/assets/logo.png" alt="HouseKeeper Logo" class="h-10 w-auto object-contain drop-shadow-md"></a>
+                </div>
+                <div class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-semibold text-slate-500">
+                    <a href="/Dashboard" data-nav="dashboard" class="nav-link">Dashboard</a>
+                    <a href="/documents" data-nav="documents" class="nav-link">Documents</a>
+                    <a href="/add_task" data-nav="add_task" class="nav-link">Add Task</a>
+                    <a href="/add_to_house" data-nav="add_to_house" class="nav-link">Add to House</a>
+                    <a href="/event_calendar" data-nav="event_calendar" class="nav-link">Event Calendar</a>
+                    <a href="/shopping_list" data-nav="shopping_list" class="nav-link">Shopping Lists</a>
+                </div>
+                <div class="flex items-center gap-2 md:gap-3">
+                    <button id="profile-btn" class="flex items-center gap-2 group rounded-2xl pl-1 pr-3 py-1 hover:bg-green-50 transition-all duration-300">
+                        <div id="profile-avatar" class="profile-avatar w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-black shadow-md shadow-green-500/20 group-hover:scale-105 transition-transform">H</div>
+                        <div class="hidden md:block text-left">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-0.5">Household</p>
+                            <p id="display_name" class="text-xs font-bold text-slate-800 max-w-[120px] truncate leading-tight"></p>
+                        </div>
+                    </button>
+                    <button type="button" class="hk-logout-btn" aria-label="Log out">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                        <span class="hidden md:inline">Log Out</span>
+                    </button>
+                    <button id="mobile-menu-button" type="button" class="md:hidden p-2 text-slate-600 shrink-0" aria-label="Menu" aria-expanded="false">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="app-nav-mobile-menu hidden md:hidden">
+                <a href="/Dashboard" data-nav="dashboard" class="nav-link">Dashboard</a>
+                <a href="/documents" data-nav="documents" class="nav-link">Documents</a>
+                <a href="/add_task" data-nav="add_task" class="nav-link">Add Task</a>
+                <a href="/add_to_house" data-nav="add_to_house" class="nav-link">Add to House</a>
+                <a href="/event_calendar" data-nav="event_calendar" class="nav-link">Event Calendar</a>
+                <a href="/shopping_list" data-nav="shopping_list" class="nav-link">Shopping Lists</a>
+                <button type="button" class="hk-logout-btn hk-logout-btn-mobile md:hidden">Log Out</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="profile-modal" class="hk-modal-overlay fixed inset-0 z-[9998] hidden items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+        <div id="profile-modal-box" class="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl border border-gray-100 transform scale-95 opacity-0 transition-all duration-300">
+            <div class="flex items-center gap-4 mb-6">
+                <div id="profile-modal-avatar" class="profile-avatar w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-black shadow-lg shadow-green-500/25">H</div>
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800">Household Profile</h3>
+                    <p class="text-sm text-slate-400">Customize your family name</p>
+                </div>
+            </div>
+            <label for="household-name-input" class="form-label">Household Name</label>
+            <input id="household-name-input" type="text" maxlength="60" placeholder="e.g. The Smith Family" class="form-input mb-2"/>
+            <p id="profile-error" class="text-red-500 text-xs font-medium mb-4 hidden"></p>
+            <p id="profile-success" class="text-green-600 text-xs font-medium mb-4 hidden">Name updated successfully!</p>
+            <div class="flex gap-3 mt-6">
+                <button id="profile-cancel-btn" class="flex-1 py-3 text-sm font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors border border-gray-100">Cancel</button>
+                <button id="profile-save-btn" class="flex-1 py-3 text-sm font-bold text-white bg-gradient-to-r from-green-400 to-[#2FA084] rounded-xl shadow-lg shadow-green-500/20 transition-all active:scale-95">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="app-main pb-16 px-4 flex justify-center fade-in-up fade-in-up-delay-1">
+        <div class="w-full max-w-lg">
+            <div class="text-center mb-8">
+                <p class="text-[10px] font-black text-green-500 uppercase tracking-[0.25em] mb-2">Tasks</p>
+                <h1 class="text-3xl font-bold text-slate-800">Add New Task</h1>
+                <p class="text-slate-400 text-sm mt-2 font-medium">Keep your household organized</p>
+            </div>
+
+            <div class="form-card rounded-[2rem] p-8 md:p-10">
+                <form id="task_form" class="space-y-6">
+                    <div>
+                        <label for="task_headline" class="form-label">Task Headline</label>
+                        <input type="text" id="task_headline" name="task_headline" required placeholder="Example: Fix the drain..."
+                            class="form-input">
+                    </div>
+                    <div>
+                        <label for="task_body" class="form-label">Task Description</label>
+                        <textarea id="task_body" name="task_body" rows="3" placeholder="What needs to be done?"
+                            class="form-input resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="form-label">Task Urgency</label>
+                        <div class="urgency-picker" role="radiogroup" aria-label="Task urgency">
+                            <label class="urgency-option">
+                                <input type="radio" name="task_urgency" value="low" required class="sr-only">
+                                <span class="urgency-dot urgency-dot-low urgency-dot-lg" aria-hidden="true"></span>
+                                <span class="urgency-option-text">On Free Time</span>
+                            </label>
+                            <label class="urgency-option">
+                                <input type="radio" name="task_urgency" value="medium" class="sr-only">
+                                <span class="urgency-dot urgency-dot-medium urgency-dot-lg" aria-hidden="true"></span>
+                                <span class="urgency-option-text">Important</span>
+                            </label>
+                            <label class="urgency-option">
+                                <input type="radio" name="task_urgency" value="high" class="sr-only">
+                                <span class="urgency-dot urgency-dot-high urgency-dot-lg" aria-hidden="true"></span>
+                                <span class="urgency-option-text">Must be Done Soon</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <button type="submit" class="btn-primary btn-purple">Add Task</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="/Dashboard" class="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-green-600 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    Return to Dashboard
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/auth-guard.js"></script>
+    <script src="/js/nav.js"></script>
+    <script src="/js/toast.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/add_task.js"></script>
+</body>
+</html>

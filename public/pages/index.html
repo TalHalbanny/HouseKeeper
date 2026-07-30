@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>HouseKeeper | Login</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            min-height: 100dvh;
+        }
+
+        body {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: url('/assets/signinbg.png') center center / cover no-repeat;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(0, 0, 0, 0.35);
+            pointer-events: none;
+        }
+
+        @media (max-width: 767px) {
+            body::before {
+                left: 0;
+                right: 0;
+                width: 100%;
+                background-size: cover;
+                background-position: center center;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+
+    <form method="POST" id="login_form" class="w-full max-w-md px-4 py-6">
+        <div class="flex flex-col items-center">
+            <div class="bg-white/95 shadow-2xl rounded-2xl p-8 flex flex-col w-full backdrop-blur-md">
+                <div class="w-full flex justify-center mb-8">
+                    <img src="/assets/logo.png" alt="HouseKeeper Logo" class="w-[150px] h-auto object-contain drop-shadow-lg">
+                </div>
+                <div class="relative mb-4">
+                    <label for="InputMail" class="leading-7 text-sm text-gray-600 font-medium">Email</label>
+                    <input type="email" id="InputMail" name="validateEmail" placeholder="your@email.com" class="w-full bg-gray-50 rounded-xl border border-gray-300 focus:border-green-500 focus:ring-4 focus:ring-green-100 text-base outline-none text-gray-700 py-2 px-4 transition-all duration-200">
+                </div>
+                <div class="relative mb-6">
+                    <label for="InputPIN" class="leading-7 text-sm text-gray-600 font-medium">Household PIN</label>
+                    <input type="password" id="InputPIN" name="householdPIN" placeholder="••••" class="w-full bg-gray-50 rounded-xl border border-gray-300 focus:border-green-500 focus:ring-4 focus:ring-green-100 text-base outline-none text-gray-700 py-2 px-4 transition-all duration-200">
+                </div>
+                <button type="submit" class="text-white bg-green-500 border-0 py-3 px-8 focus:outline-none hover:bg-green-600 rounded-xl text-lg font-bold shadow-lg shadow-green-200 transition-all active:scale-95">
+                    Enter your House
+                </button>
+                <div class="mt-6 flex flex-col items-center space-y-3">
+                    <p class="text-sm text-gray-600">
+                        New Here?
+                        <a href="/register" class="text-green-600 font-bold hover:underline">Sign up!</a>
+                    </p>
+                    <a href="#" class="text-xs text-gray-400 hover:text-green-500 transition-colors">I Forgot my Password</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script src="/js/validate_user.js"></script>
+</body>
+</html>

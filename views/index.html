@@ -2,29 +2,64 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>HouseKeeper | Login</title>
     <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            min-height: 100dvh;
+        }
+
         body {
-            background-image: url('assets/signinbg.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: url('/assets/signinbg.png') center center / cover no-repeat;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(0, 0, 0, 0.35);
+            pointer-events: none;
+        }
+
+        @media (max-width: 767px) {
+            body::before {
+                left: 0;
+                right: 0;
+                width: 100%;
+                background-size: cover;
+                background-position: center center;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center bg-gray-900/50 backdrop-blur-sm">
+<body class="min-h-screen flex items-center justify-center">
 
-    <div class="absolute inset-0 bg-black opacity-40 -z-10"></div>
-
-    <form method="POST" id="login_form" class="w-full max-w-md px-4">
+    <form method="POST" id="login_form" class="w-full max-w-md px-4 py-6">
         <div class="flex flex-col items-center">
             
             <div class="bg-white/95 shadow-2xl rounded-2xl p-8 flex flex-col w-full backdrop-blur-md">
                 
                 <div class="w-full flex justify-center mb-8">
-                    <img src="assets/logo.png" alt="HouseKeeper Logo" class="w-[150px] h-auto object-contain drop-shadow-lg">
+                    <img src="/assets/logo.png" alt="HouseKeeper Logo" class="w-[150px] h-auto object-contain drop-shadow-lg">
                 </div>
                 
                 <div class="relative mb-4">

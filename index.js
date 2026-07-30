@@ -1,6 +1,10 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
+
+process.env.SUPABASE_URL = process.env.SUPABASE_URL || 'https://aldyswzileqxvxciftmh.supabase.co';
+process.env.SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZHlzd3ppbGVxeHZ4Y2lmdG1oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NDMzMTQsImV4cCI6MjA5MjIxOTMxNH0.c3NGC4_QhOdhvOhipxi-HXkU4LaIFWfkJth8NwN--3w';
+
 const supabase = require('./public/js/supabase'); // IMPORT SUPABASE.JS
 const multer = require('multer');
 
