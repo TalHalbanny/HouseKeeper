@@ -81,6 +81,14 @@ The app works with the Tailwind CDN. To compile local CSS (if you add `input.css
 npm run dev
 ```
 
+## Screenshots
+
+Main Dashboard Screen
+![Dashboard](./mainscreen.png)
+
+Responsive in every screen size
+![Responsive](./responsiveness.png)
+
 ---
 
 ## Application routes
