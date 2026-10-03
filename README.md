@@ -82,6 +82,7 @@ npm run dev
 ```
 
 ## Screenshots
+---
 
 Main Dashboard Screen
 ![Dashboard](./mainscreen.png)
