@@ -82,12 +82,14 @@ npm run dev
 ```
 
 ## Screenshots
----
+
 
 Main Dashboard Screen
+
 ![Dashboard](./mainscreen.png)
 
 Responsive in every screen size
+
 ![Responsive](./responsiveness.png)
 
 ---
